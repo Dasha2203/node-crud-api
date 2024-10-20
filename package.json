@@ -1,0 +1,29 @@
+{
+  "scripts": {
+    "build": "tsc",
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "@types/node": "^22.7.7",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
+    "nodemon": "^3.1.7",
+    "typescript": "^5.6.3"
+  },
+  "name": "crud-api",
+  "description": "* Simple CRUD API",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dasha2203/node-crud-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dasha2203/node-crud-api/issues"
+  },
+  "homepage": "https://github.com/Dasha2203/node-crud-api#readme"
+}
