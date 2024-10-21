@@ -4,13 +4,15 @@ import {v4 as uuidv4} from 'uuid';
 const inititalUsers: User[] = [
   {
     id: uuidv4(),
-    name: 'Dasha',
-    lastName: 'Korbut',
+    username: 'Dasha',
+    age: 15,
+    hobbies: ['web development', 'knitting']
   },
   {
     id: uuidv4(),
-    name: 'Kate',
-    lastName: 'BlaBla',
+    username: 'Kate',
+    age: 20,
+    hobbies: []
   },
 ];
 

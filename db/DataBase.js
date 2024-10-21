@@ -5,13 +5,15 @@ const uuid_1 = require("uuid");
 const inititalUsers = [
     {
         id: (0, uuid_1.v4)(),
-        name: 'Dasha',
-        lastName: 'Korbut',
+        username: 'Dasha',
+        age: 15,
+        hobbies: ['web development', 'knitting']
     },
     {
         id: (0, uuid_1.v4)(),
-        name: 'Kate',
-        lastName: 'BlaBla',
+        username: 'Kate',
+        age: 20,
+        hobbies: []
     },
 ];
 class DataBase {
