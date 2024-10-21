@@ -146,6 +146,11 @@ const server = createServer(async (req, res) => {
     res.end();
     return;
   }
+
+  res.writeHead(404, headers);
+  res.end(JSON.stringify({
+    message: `The path ${req.url} didn't find`,
+  }))
 })
 
 server.listen(4000, () => {

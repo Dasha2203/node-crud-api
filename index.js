@@ -118,6 +118,10 @@ const server = (0, http_1.createServer)((req, res) => __awaiter(void 0, void 0, 
         res.end();
         return;
     }
+    res.writeHead(404, headers);
+    res.end(JSON.stringify({
+        message: `The path ${req.url} didn't find`,
+    }));
 }));
 server.listen(4000, () => {
     console.log('server is listening port 4000');
