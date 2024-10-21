@@ -1,7 +1,9 @@
 {
   "scripts": {
     "build": "tsc",
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "start:dev": "nodemon --watch src --exec ts-node-dev index.ts",
+    "start:prod": "npm run build && node index.js"
   },
   "dependencies": {
     "@types/node": "^22.7.7",

@@ -25,43 +25,9 @@ const headers = {
 };
 const server = (0, http_1.createServer)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d;
-    const method = req.method;
-    if (method === 'PUT' && ((_a = req.url) === null || _a === void 0 ? void 0 : _a.includes('/api/users'))) {
-        const partsPath = req.url.split('/').filter(i => !!i);
-        if (partsPath.length === 3) {
-            const userId = partsPath[2];
-            if (!(0, uuid_1.validate)(userId)) {
-                res.writeHead(400, headers);
-                res.end(JSON.stringify({ message: `${userId} is invalid` }));
-                return;
-            }
-            const user = db.findUser(userId);
-            if (!user) {
-                res.writeHead(404, headers);
-                res.end(JSON.stringify({ message: `${userId} didn't find` }));
-                return;
-            }
-            const body = yield (0, getBody_1.getBody)(req);
-            const data = JSON.parse(body);
-            if (!data.username || !data.age || !Array.isArray(data.hobbies)) {
-                res.statusCode = 400;
-                res.end(JSON.stringify({ message: 'Incorrect data format' }));
-                return;
-            }
-            const updatedUser = {
-                id: userId,
-                username: data.username,
-                age: data.age,
-                hobbies: data.hobbies,
-            };
-            db.updateUser(updatedUser);
-            res.writeHead(200, headers);
-            res.end(JSON.stringify(updatedUser));
-            return;
-        }
-    }
-    if (method === 'GET') {
-        if ((_b = req.url) === null || _b === void 0 ? void 0 : _b.includes('/api/users')) {
+    try {
+        const method = req.method;
+        if (method === 'PUT' && ((_a = req.url) === null || _a === void 0 ? void 0 : _a.includes('/api/users'))) {
             const partsPath = req.url.split('/').filter(i => !!i);
             if (partsPath.length === 3) {
                 const userId = partsPath[2];
@@ -76,58 +42,100 @@ const server = (0, http_1.createServer)((req, res) => __awaiter(void 0, void 0, 
                     res.end(JSON.stringify({ message: `${userId} didn't find` }));
                     return;
                 }
+                const body = yield (0, getBody_1.getBody)(req);
+                const data = JSON.parse(body);
+                if (!data.username || !data.age || !Array.isArray(data.hobbies)) {
+                    res.statusCode = 400;
+                    res.end(JSON.stringify({ message: 'Incorrect data format' }));
+                    return;
+                }
+                const updatedUser = {
+                    id: userId,
+                    username: data.username,
+                    age: data.age,
+                    hobbies: data.hobbies,
+                };
+                db.updateUser(updatedUser);
                 res.writeHead(200, headers);
-                res.end(JSON.stringify(user));
+                res.end(JSON.stringify(updatedUser));
                 return;
             }
-            const users = db.getUsers();
+        }
+        if (method === 'GET') {
+            if ((_b = req.url) === null || _b === void 0 ? void 0 : _b.includes('/api/users')) {
+                const partsPath = req.url.split('/').filter(i => !!i);
+                if (partsPath.length === 3) {
+                    const userId = partsPath[2];
+                    if (!(0, uuid_1.validate)(userId)) {
+                        res.writeHead(400, headers);
+                        res.end(JSON.stringify({ message: `${userId} is invalid` }));
+                        return;
+                    }
+                    const user = db.findUser(userId);
+                    if (!user) {
+                        res.writeHead(404, headers);
+                        res.end(JSON.stringify({ message: `${userId} didn't find` }));
+                        return;
+                    }
+                    res.writeHead(200, headers);
+                    res.end(JSON.stringify(user));
+                    return;
+                }
+                const users = db.getUsers();
+                res.writeHead(200, headers);
+                res.end(JSON.stringify(users));
+                return;
+            }
+        }
+        if (req.method === 'POST' && ((_c = req.url) === null || _c === void 0 ? void 0 : _c.includes('/api/users'))) {
+            const body = yield (0, getBody_1.getBody)(req);
+            const data = JSON.parse(body);
+            if (!data.username || !data.age || !Array.isArray(data.hobbies)) {
+                res.writeHead(400, headers);
+                res.end(JSON.stringify({ message: 'Incorrect data format' }));
+                return;
+            }
+            const newUser = {
+                id: (0, uuid_1.v4)(),
+                username: data.username,
+                age: data.age,
+                hobbies: data.hobbies
+            };
+            db.addUser(newUser);
             res.writeHead(200, headers);
-            res.end(JSON.stringify(users));
+            res.end(JSON.stringify(newUser));
             return;
         }
+        if (req.method === 'DELETE' && ((_d = req.url) === null || _d === void 0 ? void 0 : _d.includes('/api/users'))) {
+            const partsPath = req.url.split('/').filter(i => !!i);
+            const userId = partsPath[2];
+            if (!(0, uuid_1.validate)(userId)) {
+                res.writeHead(400, headers);
+                res.end(JSON.stringify({ message: `${userId} is invalid` }));
+                return;
+            }
+            const user = db.findUser(userId);
+            if (!user) {
+                res.writeHead(404, headers);
+                res.end(JSON.stringify({ message: `${userId} didn't find` }));
+                return;
+            }
+            db.deleteUser(userId);
+            res.writeHead(204, headers);
+            res.end();
+            return;
+        }
+        res.writeHead(404, headers);
+        res.end(JSON.stringify({
+            message: `The path ${req.url} didn't find`,
+        }));
     }
-    if (req.method === 'POST' && ((_c = req.url) === null || _c === void 0 ? void 0 : _c.includes('/api/users'))) {
-        const body = yield (0, getBody_1.getBody)(req);
-        const data = JSON.parse(body);
-        if (!data.username || !data.age || !Array.isArray(data.hobbies)) {
-            res.writeHead(400, headers);
-            res.end(JSON.stringify({ message: 'Incorrect data format' }));
-            return;
-        }
-        const newUser = {
-            id: (0, uuid_1.v4)(),
-            username: data.username,
-            age: data.age,
-            hobbies: data.hobbies
-        };
-        db.addUser(newUser);
-        res.writeHead(200, headers);
-        res.end(JSON.stringify(newUser));
-        return;
+    catch (err) {
+        res.writeHead(500, headers);
+        res.end(JSON.stringify({
+            message: 'There was an error on the server'
+        }));
     }
-    if (req.method === 'DELETE' && ((_d = req.url) === null || _d === void 0 ? void 0 : _d.includes('/api/users'))) {
-        const partsPath = req.url.split('/').filter(i => !!i);
-        const userId = partsPath[2];
-        if (!(0, uuid_1.validate)(userId)) {
-            res.writeHead(400, headers);
-            res.end(JSON.stringify({ message: `${userId} is invalid` }));
-            return;
-        }
-        const user = db.findUser(userId);
-        if (!user) {
-            res.writeHead(404, headers);
-            res.end(JSON.stringify({ message: `${userId} didn't find` }));
-            return;
-        }
-        db.deleteUser(userId);
-        res.writeHead(204, headers);
-        res.end();
-        return;
-    }
-    res.writeHead(404, headers);
-    res.end(JSON.stringify({
-        message: `The path ${req.url} didn't find`,
-    }));
 }));
 server.listen(PORT, () => {
     console.log(`server is listening port ${PORT}`);
