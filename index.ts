@@ -3,7 +3,10 @@ import { DataBase } from './db/DataBase';
 import { v4 as uuidv4, validate } from 'uuid';
 import { getBody } from './libs/getBody';
 import { User } from './types/user';
+import dotenv from 'dotenv';
 
+dotenv.config();
+const PORT = process.env.PORT || 5555;
 const db = new DataBase();
 const headers = {
   'Content-type': 'application/json'
@@ -153,6 +156,6 @@ const server = createServer(async (req, res) => {
   }))
 })
 
-server.listen(4000, () => {
-  console.log('server is listening port 4000')
+server.listen(PORT, () => {
+  console.log(`server is listening port ${PORT}`)
 });

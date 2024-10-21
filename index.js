@@ -8,11 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_1 = require("http");
 const DataBase_1 = require("./db/DataBase");
 const uuid_1 = require("uuid");
 const getBody_1 = require("./libs/getBody");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const PORT = process.env.PORT || 5555;
 const db = new DataBase_1.DataBase();
 const headers = {
     'Content-type': 'application/json'
@@ -123,6 +129,6 @@ const server = (0, http_1.createServer)((req, res) => __awaiter(void 0, void 0, 
         message: `The path ${req.url} didn't find`,
     }));
 }));
-server.listen(4000, () => {
-    console.log('server is listening port 4000');
+server.listen(PORT, () => {
+    console.log(`server is listening port ${PORT}`);
 });
