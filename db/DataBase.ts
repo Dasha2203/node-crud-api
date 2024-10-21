@@ -1,16 +1,31 @@
 import { User } from "../types/user";
+import {v4 as uuidv4} from 'uuid';
+
+const inititalUsers: User[] = [
+  {
+    id: uuidv4(),
+    name: 'Dasha',
+    lastName: 'Korbut',
+  },
+  {
+    id: uuidv4(),
+    name: 'Kate',
+    lastName: 'BlaBla',
+  },
+];
 
 export class DataBase {
-  users:User[] = [];
+  users:User[] = inititalUsers;
 
   constructor() {
+    this.users = inititalUsers;
   };
   
   getUsers() {
     return this.users;
   }
 
-  findUser(userId: number) {
+  findUser(userId: string) {
     return this.users.find(user => user.id === userId) || null;
   }
 
@@ -28,7 +43,7 @@ export class DataBase {
     return user;
   }
 
-  deleteUser(userId: number) {
+  deleteUser(userId: string) {
     const idx = this.users.findIndex(user => user.id === userId);
 
     if (idx === -1) {
